@@ -10,12 +10,17 @@ try:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers import config_validation as cv
     from homeassistant.helpers.typing import ConfigType
-
-    CONFIG_SCHEMA = cv.empty_config_schema(DOMAIN)
 except ImportError:  # local unit tests without HA installed
     HomeAssistant = Any  # type: ignore[misc,assignment]
     ConfigType = dict  # type: ignore[misc,assignment]
-    CONFIG_SCHEMA = {DOMAIN: dict}
+
+    class cv:  # type: ignore[no-redef]
+        @staticmethod
+        def empty_config_schema(domain: str) -> dict:
+            return {domain: dict}
+
+
+CONFIG_SCHEMA = cv.empty_config_schema(DOMAIN)
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
