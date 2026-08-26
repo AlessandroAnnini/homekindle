@@ -88,15 +88,20 @@ def _column(
         y += 28
 
 
-def render_png(fixtures: DashboardFixtures, layout_path: Path) -> bytes:
+def render_png(
+    fixtures: DashboardFixtures,
+    layout_path: Path,
+    size: tuple[int, int] | None = None,
+) -> bytes:
     _TEXT.clear()
     layout = load_kindle_yaml(layout_path)
     view = layout["views"][0]
     sections = view["sections"]
-    image = Image.new("L", (PNG_WIDTH, PNG_HEIGHT), PAPER)
+    width, height = size or (PNG_WIDTH, PNG_HEIGHT)
+    image = Image.new("L", (width, height), PAPER)
     draw = ImageDraw.Draw(image)
-    draw.line((PNG_WIDTH // 2, 16, PNG_WIDTH // 2, PNG_HEIGHT - 56), fill=MUTED, width=1)
-    draw.line((16, PNG_HEIGHT - 52, PNG_WIDTH - 16, PNG_HEIGHT - 52), fill=MUTED, width=1)
+    draw.line((width // 2, 16, width // 2, height - 56), fill=MUTED, width=1)
+    draw.line((16, height - 52, width - 16, height - 52), fill=MUTED, width=1)
 
     today_max = 6
     tomorrow_max = 6
@@ -111,7 +116,7 @@ def render_png(fixtures: DashboardFixtures, layout_path: Path) -> bytes:
     _column(draw, fixtures, "today", sections[0].get("title") or "Today", 0, today_max)
     _column(
         draw, fixtures, "tomorrow", sections[1].get("title") or "Tomorrow",
-        PNG_WIDTH // 2, tomorrow_max,
+        width // 2, tomorrow_max,
     )
 
     footer = [f"updated {fixtures.updated}"]
@@ -120,7 +125,7 @@ def render_png(fixtures: DashboardFixtures, layout_path: Path) -> bytes:
     footer.extend(fixtures.exceptions)
     footer.extend(fixtures.todos)
     foot = "  ·  ".join(footer)
-    draw.text((16, PNG_HEIGHT - 36), foot, fill=GRAY, font=_font(14))
+    draw.text((16, height - 36), foot, fill=GRAY, font=_font(14))
     _TEXT.append(foot)
 
     buffer = BytesIO()

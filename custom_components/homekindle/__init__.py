@@ -35,4 +35,15 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: Any) -> bool:
+    from . import dashboard
+    from .options import apply_home_location
+
+    home = None
+    try:
+        home = (float(hass.config.latitude), float(hass.config.longitude))
+    except (AttributeError, TypeError):
+        home = None
+    opts = apply_home_location({**entry.data, **entry.options}, home)
+    hass.data.setdefault(DOMAIN, {})["options"] = opts
+    dashboard.CURRENT_OPTIONS = opts
     return True

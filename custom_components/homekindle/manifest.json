@@ -2,6 +2,7 @@
   "domain": "homekindle",
   "name": "HomeKindle",
   "codeowners": ["@AlessandroAnnini"],
+  "config_flow": true,
   "dependencies": ["http"],
   "documentation": "https://github.com/AlessandroAnnini/homekindle",
   "integration_type": "service",

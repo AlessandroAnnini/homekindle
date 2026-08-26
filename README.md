@@ -14,8 +14,9 @@ No auth. ETag / If-None-Match so the screensaver can skip an unchanged frame.
 2. Open the link above, or HACS → ⋮ → **Custom repositories** → `https://github.com/AlessandroAnnini/homekindle` → type **Integration**.
 3. Download **HomeKindle** (pick a GitHub Release, not a raw branch).
 4. Restart Home Assistant.
-5. Add `homekindle:` to `configuration.yaml`.
-6. Check: `curl -I http://homeassistant.local:8123/api/homekindle/dashboard.png`
+5. Settings → Devices & services → Add integration → **HomeKindle**.
+6. Set location (or use HA home), Kindle model, weather model, secret ICS URL, and refresh minutes. Submit.
+7. Check: `curl -I http://homeassistant.local:8123/api/homekindle/dashboard.png`
 
 Manual install: copy `custom_components/homekindle/` into `/config/custom_components/homekindle/` and restart.
 
@@ -23,9 +24,17 @@ Manual install: copy `custom_components/homekindle/` into `/config/custom_compon
 
 HACS shows the GitHub **Release** tag. After install, Home Assistant shows `version` from `custom_components/homekindle/manifest.json`. Those two numbers stay the same (`v0.1.1` tag, `"0.1.1"` in the manifest).
 
-## Data
+## Settings
 
-Weather comes from Open-Meteo ICON-2I. Calendar comes from `HOMEKINDLE_ICAL_URL` (HA secret or env). Never put the Google iCal URL in git. Tests use `tests/fixtures/sample.ics`. If a fetch fails, the last good PNG is served.
+| Field | Default | Notes |
+| --- | --- | --- |
+| Use HA home | on | Fills lat/lon from Home Assistant |
+| Kindle model | Touch 600×800 | Paperwhite 1 is 758×1024 |
+| Weather model | ICON-2I | Or Best match / ICON-EU / ECMWF / GFS |
+| Calendar ICS URL | empty | Password field. Never put this in git |
+| Refresh minutes | 15 | How often HA refetches. Set the **same** number on the Kindle screensaver |
+
+Weather is Open-Meteo. Calendar is the ICS URL on the config entry (or `HOMEKINDLE_ICAL_URL` for local tests). If a fetch fails, the last good PNG is served. Tests use `tests/fixtures/sample.ics`.
 
 ## Kindle client
 
