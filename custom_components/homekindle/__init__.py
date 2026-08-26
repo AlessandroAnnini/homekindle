@@ -16,6 +16,12 @@ except ImportError:  # local unit tests without HA installed
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     hass.data.setdefault(DOMAIN, {})
+    try:
+        from .ha_view import HomeKindleDashboardView
+
+        hass.http.register_view(HomeKindleDashboardView())
+    except (ImportError, AttributeError):
+        pass
     return True
 
 
