@@ -4,10 +4,8 @@ from __future__ import annotations
 
 from homeassistant.components.http import HomeAssistantView
 
-from .fixtures import DEFAULT_FIXTURES
+from .dashboard import render_or_last_good
 from .http_view import dashboard_response
-from .layout import packaged_layout_path
-from .render import render_png
 
 
 class HomeKindleDashboardView(HomeAssistantView):
@@ -17,9 +15,7 @@ class HomeKindleDashboardView(HomeAssistantView):
 
     async def get(self, request):
         hass = request.app["hass"]
-        png = await hass.async_add_executor_job(
-            render_png, DEFAULT_FIXTURES, packaged_layout_path()
-        )
+        png = await hass.async_add_executor_job(render_or_last_good)
         status, headers, body = dashboard_response(
             png, request.headers.get("If-None-Match")
         )

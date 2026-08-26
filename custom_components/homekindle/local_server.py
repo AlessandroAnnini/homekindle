@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
 from .dashboard import render_or_last_good
 from .http_view import dashboard_response
 

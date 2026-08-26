@@ -7,6 +7,7 @@ from datetime import datetime
 from pathlib import Path
 
 from .feeds import (
+    ROME,
     LastGoodStore,
     events_from_ics,
     footer_labels,
@@ -37,7 +38,7 @@ def fixtures_from_recorded(now: datetime | None = None) -> DashboardFixtures:
     return DashboardFixtures(
         weather=weather,
         events=events,
-        updated=datetime.now().strftime("%H:%M"),
+        updated=datetime.now(ROME).strftime("%H:%M"),
         workday=True,
         exceptions=labels,
         todos=(),
