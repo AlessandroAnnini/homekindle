@@ -11,7 +11,7 @@ import yaml
 def load_kindle_yaml(path: Path) -> dict[str, Any]:
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
     if not isinstance(data, dict):
-        raise ValueError("kindle.yaml must be a mapping")
+        raise TypeError("kindle.yaml must be a mapping")
     views = data.get("views") or []
     if not views:
         raise ValueError("kindle.yaml needs a views list")

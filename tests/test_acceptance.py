@@ -5,18 +5,16 @@ from __future__ import annotations
 from io import BytesIO
 from pathlib import Path
 
-from PIL import Image
-
 from custom_components.homekindle.const import EMPTY_DAY, PNG_HEIGHT, PNG_WIDTH
 from custom_components.homekindle.fixtures import (
     DEFAULT_FIXTURES,
     DashboardFixtures,
     EventFixture,
-    WeatherFixture,
 )
 from custom_components.homekindle.http_view import dashboard_response, etag_for
 from custom_components.homekindle.layout import load_kindle_yaml
 from custom_components.homekindle.render import render_png
+from PIL import Image
 
 STUDIO = Path(__file__).resolve().parents[2]
 LAYOUT = STUDIO / "gf-program" / "dashboards" / "kindle.yaml"
@@ -32,7 +30,7 @@ def test_ac1_png_is_600x800_grayscale() -> None:
 
 def test_ac2_etag_repeat_is_304() -> None:
     png = render_png(DEFAULT_FIXTURES, LAYOUT)
-    status, headers, body = dashboard_response(png, None)
+    status, headers, _body = dashboard_response(png, None)
     assert status == 200
     tag = headers.get("ETag") or etag_for(png)
     status2, _, body2 = dashboard_response(png, tag)
