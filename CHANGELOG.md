@@ -6,7 +6,7 @@
 ### Added
 
 - Feature `homekindle-feeds` shipped to develop.
-- HACS packaging: GitHub metadata, brand icon, hassfest/HACS validate workflow.
+- HACS packaging: GitHub metadata, brand icon, hassfest/HACS validate workflow, MIT license.
 
 ## [0.1.0] - 2026-08-26
 
