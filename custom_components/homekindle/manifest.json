@@ -4,6 +4,7 @@
   "codeowners": ["@AlessandroAnnini"],
   "documentation": "https://github.com/AlessandroAnnini/homekindle",
   "issue_tracker": "https://github.com/AlessandroAnnini/homekindle/issues",
+  "dependencies": ["http"],
   "integration_type": "service",
   "iot_class": "local_polling",
   "requirements": [
