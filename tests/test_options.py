@@ -88,6 +88,17 @@ def test_use_ha_home_fills_coordinates() -> None:
     assert merged[CONF_LONGITUDE] == 9.0
 
 
+def test_fetch_text_rejects_file_scheme() -> None:
+    from custom_components.homekindle.options import fetch_text
+
+    try:
+        fetch_text("file:///etc/passwd")
+    except ValueError as exc:
+        assert "non-http" in str(exc)
+    else:
+        raise AssertionError("expected ValueError")
+
+
 def test_ac7_last_good_survives_failed_fetch(tmp_path: Path) -> None:
     store = LastGoodStore(tmp_path / "last.png")
     store.put(b"png-bytes")

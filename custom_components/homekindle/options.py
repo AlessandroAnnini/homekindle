@@ -95,8 +95,12 @@ def build_open_meteo_url(
 
 
 def fetch_text(url: str, timeout: float = 20) -> str:
+    from urllib.parse import urlparse
     from urllib.request import Request, urlopen
 
+    scheme = urlparse(url).scheme.lower()
+    if scheme not in {"http", "https"}:
+        raise ValueError(f"refusing non-http(s) URL scheme: {scheme or 'missing'}")
     request = Request(url, headers={"User-Agent": "HomeKindle"})
-    with urlopen(request, timeout=timeout) as response:
+    with urlopen(request, timeout=timeout) as response:  # nosec B310
         return response.read().decode("utf-8")
