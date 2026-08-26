@@ -4,7 +4,9 @@ HACS custom integration that renders a 600x800 grayscale PNG for a jailbroken Ki
 
 `http://homeassistant.local:8123/api/homekindle/dashboard.png`
 
-No auth. ETag / If-None-Match so the screensaver can skip an unchanged frame.
+![HomeKindle two-day dashboard](docs/example.png)
+
+Weather and a two-day agenda. All-day events use an open ring; timed events use a filled dot. No auth. ETag / If-None-Match so the screensaver can skip an unchanged frame.
 
 ## Install with HACS
 
@@ -22,7 +24,7 @@ Manual install: copy `custom_components/homekindle/` into `/config/custom_compon
 
 ## Versioning
 
-HACS shows the GitHub **Release** tag. After install, Home Assistant shows `version` from `custom_components/homekindle/manifest.json`. Those two numbers stay the same (`v0.1.1` tag, `"0.1.1"` in the manifest).
+HACS shows the GitHub **Release** tag. After install, Home Assistant shows `version` from `custom_components/homekindle/manifest.json`. Those two numbers stay the same (`v0.2.1` tag, `"0.2.1"` in the manifest).
 
 ## Settings
 

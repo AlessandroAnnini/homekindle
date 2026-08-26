@@ -88,11 +88,3 @@ views:
             card:
               type: glance
               show_icon: false
-          - type: todo-list
-            entity: todo.shopping_list
-            hide_completed: true
-            hide_create: true
-            hide_section_headers: true
-            homekindle:
-              max_items: 5
-              hide_when_empty: true

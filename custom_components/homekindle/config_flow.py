@@ -19,6 +19,7 @@ from .options import (
     KINDLE_TOUCH,
     REFRESH_MAX,
     REFRESH_MIN,
+    WEATHER_MODEL_LABELS,
     WEATHER_MODELS,
 )
 
@@ -74,7 +75,10 @@ def _form_schema(defaults: dict[str, Any]) -> Any:
                 default=defaults.get(CONF_WEATHER_MODEL, DEFAULTS[CONF_WEATHER_MODEL]),
             ): SelectSelector(
                 SelectSelectorConfig(
-                    options=[{"value": mid, "label": mid} for mid in WEATHER_MODELS]
+                    options=[
+                        {"value": mid, "label": WEATHER_MODEL_LABELS.get(mid, mid)}
+                        for mid in WEATHER_MODELS
+                    ]
                 )
             ),
             vol.Optional(

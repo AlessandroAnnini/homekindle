@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from datetime import timedelta
 from urllib.parse import urlencode
+from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
 
@@ -37,12 +38,27 @@ REFRESH_MIN = 5
 REFRESH_MAX = 120
 DEFAULT_REFRESH_MINUTES = 15
 
+CONF_TIMEZONE = "timezone"
+DEFAULT_TIMEZONE = "Europe/Rome"
+
+WEATHER_MODEL_LABELS = {
+    WEATHER_BEST_MATCH: "Best match",
+    WEATHER_ICON_2I: "ICON-2I (Italy)",
+    "icon_seamless": "ICON seamless",
+    "icon_eu": "ICON-EU",
+    "ecmwf_ifs025": "ECMWF IFS",
+    "gfs_seamless": "GFS seamless",
+}
+
 DEFAULTS: dict[str, object] = {
     CONF_USE_HA_HOME: True,
+    CONF_LATITUDE: 43.62,
+    CONF_LONGITUDE: 13.41,
     CONF_KINDLE_MODEL: KINDLE_TOUCH,
     CONF_WEATHER_MODEL: WEATHER_ICON_2I,
     CONF_ICAL_URL: "",
     CONF_REFRESH_MINUTES: DEFAULT_REFRESH_MINUTES,
+    CONF_TIMEZONE: DEFAULT_TIMEZONE,
 }
 
 FORM_FIELDS = (
@@ -94,13 +110,18 @@ def build_open_meteo_url(
     return f"{OPEN_METEO_URL}?{urlencode(query)}"
 
 
+class _NoRedirect(HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        raise ValueError(f"refusing HTTP redirect to {newurl}")
+
+
 def fetch_text(url: str, timeout: float = 20) -> str:
     from urllib.parse import urlparse
-    from urllib.request import Request, urlopen
 
     scheme = urlparse(url).scheme.lower()
     if scheme not in {"http", "https"}:
         raise ValueError(f"refusing non-http(s) URL scheme: {scheme or 'missing'}")
     request = Request(url, headers={"User-Agent": "HomeKindle"})
-    with urlopen(request, timeout=timeout) as response:  # nosec B310
+    opener = build_opener(_NoRedirect)
+    with opener.open(request, timeout=timeout) as response:  # nosec B310
         return response.read().decode("utf-8")

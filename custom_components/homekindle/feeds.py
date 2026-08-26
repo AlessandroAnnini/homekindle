@@ -15,10 +15,6 @@ from recurring_ical_events import of
 from .fixtures import EventFixture, WeatherFixture
 
 ROME = ZoneInfo("Europe/Rome")
-LAT = 43.62
-LON = 13.41
-OPEN_METEO = "https://api.open-meteo.com/v1/forecast"
-OPEN_METEO_MODEL = "italia_meteo_arpae_icon_2i"
 ICAL_ENV = "HOMEKINDLE_ICAL_URL"
 ALWAYS_SHOW = ("binary_sensor.workday_sensor_it_an",)
 EXCEPTIONS = (
@@ -28,7 +24,29 @@ EXCEPTIONS = (
     ("input_boolean.ospiti", "guests"),
     ("input_boolean.vacanza", "holiday"),
 )
-WMO_TEXT = {0: "clear", 1: "mostly clear", 2: "partly cloudy", 3: "overcast"}
+WMO_TEXT = {
+    0: "clear",
+    1: "mostly clear",
+    2: "partly cloudy",
+    3: "overcast",
+    45: "fog",
+    48: "rime fog",
+    51: "light drizzle",
+    53: "drizzle",
+    55: "dense drizzle",
+    61: "light rain",
+    63: "rain",
+    65: "heavy rain",
+    71: "light snow",
+    73: "snow",
+    75: "heavy snow",
+    80: "showers",
+    81: "showers",
+    82: "heavy showers",
+    95: "thunderstorm",
+    96: "thunderstorm",
+    99: "thunderstorm",
+}
 
 
 @dataclass(frozen=True)
@@ -37,8 +55,18 @@ class HaState:
     state: str
 
 
-def window(now: datetime | None = None) -> tuple[datetime, datetime]:
-    current = now.astimezone(ROME) if now else datetime.now(ROME)
+def zone(name: str | None = None) -> ZoneInfo:
+    try:
+        return ZoneInfo(name) if name else ROME
+    except (KeyError, ValueError, OSError):
+        return ROME
+
+
+def window(
+    now: datetime | None = None, timezone: str | None = None
+) -> tuple[datetime, datetime]:
+    tz = zone(timezone)
+    current = now.astimezone(tz) if now else datetime.now(tz)
     start = current.replace(hour=0, minute=0, second=0, microsecond=0)
     end = start + timedelta(days=2)
     return start, end
@@ -79,21 +107,36 @@ def weather_from_open_meteo(payload: dict) -> tuple[WeatherFixture, ...]:
     return tuple(rows)
 
 
+def _as_date(value: date | datetime) -> date:
+    return value if not isinstance(value, datetime) else value.date()
+
+
 def events_from_ics(ics_text: str, start: datetime, end: datetime) -> tuple[EventFixture, ...]:
     calendar = Calendar.from_ical(ics_text)
     today = start.astimezone(ROME).date()
     out: list[EventFixture] = []
     for event in of(calendar).between(start, end):
-        begin = event.start
-        if not isinstance(begin, datetime):
-            begin = datetime.combine(begin, datetime.min.time(), tzinfo=ROME)
+        title = str(event.get("summary") or "")
+        raw_start = event.start
+        if not isinstance(raw_start, datetime):
+            start_day = _as_date(raw_start)
+            raw_end = getattr(event, "end", None)
+            end_day = _as_date(raw_end) if raw_end is not None else start_day + timedelta(days=1)
+            if end_day <= start_day:
+                end_day = start_day + timedelta(days=1)
+            cursor = start_day
+            while cursor < end_day:
+                name = day_name(cursor, today)
+                if name in {"today", "tomorrow"}:
+                    out.append(EventFixture(name, "all day", title))
+                cursor += timedelta(days=1)
+            continue
+        begin = raw_start
         if begin.tzinfo is None:
             begin = begin.replace(tzinfo=ROME)
         local = begin.astimezone(ROME)
-        title = str(event.get("summary") or "")
-        all_day = not isinstance(event.start, datetime)
-        time_label = "all day" if all_day else local.strftime("%H:%M")
-        out.append(EventFixture(day_name(local.date(), today), time_label, title))
+        out.append(EventFixture(day_name(local.date(), today), local.strftime("%H:%M"), title))
+    out.sort(key=lambda row: (0 if row.time_label == "all day" else 1, row.time_label, row.title))
     return tuple(out)
 
 

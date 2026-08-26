@@ -42,6 +42,19 @@ def test_ac2_rrule_lands_on_tomorrow() -> None:
     assert any("Library" in e.title for e in tomorrow)
 
 
+def test_all_day_birthday_yearly_sorts_first() -> None:
+    ics = (FIXTURES / "sample.ics").read_text(encoding="utf-8")
+    start, end = window(datetime(2026, 8, 26, 12, 0, tzinfo=ROME))
+    events = events_from_ics(ics, start, end)
+    today = [e for e in events if e.day == "today"]
+    tomorrow = [e for e in events if e.day == "tomorrow"]
+    assert today[0].time_label == "all day"
+    assert "Marta" in today[0].title
+    assert any(e.time_label == "09:00" and "Stand-up" in e.title for e in today)
+    assert tomorrow[0].time_label == "all day"
+    assert "Leo" in tomorrow[0].title
+
+
 def test_ac3_off_exception_hidden() -> None:
     labels = footer_labels(
         (
