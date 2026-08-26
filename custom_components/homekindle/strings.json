@@ -25,6 +25,13 @@
       "already_configured": "HomeKindle is already configured"
     }
   },
+  "entity": {
+    "image": {
+      "dashboard": {
+        "name": "Dashboard"
+      }
+    }
+  },
   "options": {
     "step": {
       "init": {

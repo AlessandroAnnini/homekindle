@@ -12,6 +12,7 @@ from custom_components.homekindle.fixtures import (
 from custom_components.homekindle.layout import load_kindle_yaml, packaged_layout_path
 from custom_components.homekindle.render import (
     BOX_EVENT,
+    DOT_R,
     EVENT_STEP,
     INK,
     PAD,
@@ -22,7 +23,8 @@ from custom_components.homekindle.render import (
     Y_HEADING,
     Y_ICON,
     B,
-    _body_font,
+    SZ_TITLE,
+    _bold_font,
     _ink_mid_from_baseline,
     last_text_blobs,
     last_timeline,
@@ -130,7 +132,7 @@ def test_all_day_fits_and_sorts_first() -> None:
     # "all day" sits left of the line and stays on the canvas
     assert 0 <= line_x - PAD < 90
     assert image.getpixel((line_x, centers[0])) == PAPER
-    assert image.getpixel((line_x, centers[0] - 2)) == INK
+    assert image.getpixel((line_x, centers[0] - DOT_R)) == INK
     mid = (centers[0] + centers[1]) // 2
     assert image.getpixel((line_x, mid)) == INK
     assert image.getpixel((line_x, centers[1])) == INK
@@ -154,6 +156,6 @@ def test_vertical_rhythm_uses_eight_pt_spacing() -> None:
     render_png(fixtures, packaged_layout_path())
     _line_x, centers = last_timeline()["today"]
     assert centers
-    mid = BOX_EVENT - B + _ink_mid_from_baseline(_body_font(16))
+    mid = BOX_EVENT - B + _ink_mid_from_baseline(_bold_font(SZ_TITLE))
     assert all(cy == Y_EVENTS + i * EVENT_STEP + mid for i, cy in enumerate(centers))
     assert centers[1] - centers[0] == EVENT_STEP

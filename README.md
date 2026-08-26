@@ -18,13 +18,14 @@ Weather and a two-day agenda. All-day events use an open ring; timed events use 
 4. Restart Home Assistant.
 5. Settings → Devices & services → Add integration → **HomeKindle**.
 6. Set location (or use HA home), Kindle model, weather model, secret ICS URL, and refresh minutes. Submit.
-7. Check: `curl -I http://homeassistant.local:8123/api/homekindle/dashboard.png`
+7. Open the HomeKindle device. The **Dashboard** image entity shows the same PNG the Kindle fetches. Add `image.homekindle_dashboard` to a Lovelace card if you want it on a dashboard. Configure stays on the integration entry.
+8. Kindle check: `curl -I http://homeassistant.local:8123/api/homekindle/dashboard.png`
 
 Manual install: copy `custom_components/homekindle/` into `/config/custom_components/homekindle/` and restart.
 
 ## Versioning
 
-HACS shows the GitHub **Release** tag. After install, Home Assistant shows `version` from `custom_components/homekindle/manifest.json`. Those two numbers stay the same (`v0.2.2` tag, `"0.2.2"` in the manifest).
+HACS shows the GitHub **Release** tag. After install, Home Assistant shows `version` from `custom_components/homekindle/manifest.json`. Those two numbers stay the same (`v0.2.3` tag, `"0.2.3"` in the manifest).
 
 ## Settings
 

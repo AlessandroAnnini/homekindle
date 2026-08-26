@@ -25,12 +25,12 @@ _TIMELINE: dict[str, tuple[int, tuple[int, ...]]] = {}
 
 # 8pt spacing grid (600 and 800 divide by 8). Boxes and gaps are the rhythm;
 # glyphs sit inset from the box, not locked to a typographic baseline.
-# Type scale 12 / 16 / 32. Paragraph 16, after heading 16, before section 32.
+# Fridge glance scale 16 / 20 / 48. After heading 16, before section 32.
 B = 8
 PAD = 3 * B
-BOX_META = 3 * B
-BOX_WEATHER = 6 * B
-BOX_EVENT = 4 * B
+BOX_META = 4 * B
+BOX_WEATHER = 10 * B
+BOX_EVENT = 6 * B
 GAP_AFTER = 2 * B
 GAP_BEFORE = 4 * B
 Y_HEADING = PAD
@@ -42,16 +42,16 @@ Y_CONDITION = Y_ICON + ICON + GAP_AFTER
 Y_EVENTS = Y_CONDITION + BOX_META + GAP_BEFORE
 EVENT_STEP = BOX_EVENT
 GUTTER = B
-DOT_R = 2
+DOT_R = 3
 FOOTER = 6 * B
 LABEL_TRACK = 1
-SZ_LABEL = 12
-SZ_DATE = 12
-SZ_TEMP = 32
-SZ_COND = 12
-SZ_TIME = 16
-SZ_TITLE = 16
-SZ_FOOT = 12
+SZ_LABEL = 16
+SZ_DATE = 20
+SZ_TEMP = 48
+SZ_COND = 16
+SZ_TIME = 20
+SZ_TITLE = 20
+SZ_FOOT = 14
 
 
 def last_text_blobs() -> tuple[str, ...]:
@@ -205,7 +205,7 @@ def _column(
         icon_y = _px(Y_ICON, scale)
         image.paste(petroff_png(weather.wmo_code, icon_n), (x + pad, icon_y))
         temp = _temp_label(weather)
-        temp_font = _bold_font(max(20, _px(SZ_TEMP, scale)))
+        temp_font = _bold_font(max(28, _px(SZ_TEMP, scale)))
         draw.text(
             (x + pad + icon_n + _px(ICON_TEMP_GAP, scale), _box_base(icon_y, weather_h, inset)),
             temp,
@@ -225,8 +225,8 @@ def _column(
         _TEXT.extend([temp, weather.condition])
     events = _events_for(fixtures, day)[:max_events]
     y = _px(Y_EVENTS, scale)
-    body = _body_font(max(12, _px(SZ_TITLE, scale)))
-    time_font = _body_font(max(12, _px(SZ_TIME, scale)))
+    body = _bold_font(max(16, _px(SZ_TITLE, scale)))
+    time_font = _body_font(max(16, _px(SZ_TIME, scale)))
     step = _px(EVENT_STEP, scale)
     limit = height_limit(scale)
     if not events:
