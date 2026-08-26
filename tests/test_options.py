@@ -7,10 +7,19 @@ from pathlib import Path
 
 from custom_components.homekindle.feeds import LastGoodStore
 from custom_components.homekindle.options import (
+    CONF_ICAL_URL,
+    CONF_KINDLE_MODEL,
+    CONF_LATITUDE,
+    CONF_LONGITUDE,
+    CONF_REFRESH_MINUTES,
+    CONF_USE_HA_HOME,
+    CONF_WEATHER_MODEL,
+    FORM_FIELDS,
     KINDLE_PW1,
     KINDLE_TOUCH,
     WEATHER_BEST_MATCH,
     WEATHER_ICON_2I,
+    apply_home_location,
     canvas_for,
     refresh_interval,
 )
@@ -59,6 +68,24 @@ def test_ac5_ical_url_not_committed() -> None:
 
 def test_ac6_refresh_minutes() -> None:
     assert refresh_interval(20) == timedelta(minutes=20)
+
+
+def test_form_field_order() -> None:
+    assert FORM_FIELDS == (
+        CONF_USE_HA_HOME,
+        CONF_LATITUDE,
+        CONF_LONGITUDE,
+        CONF_KINDLE_MODEL,
+        CONF_WEATHER_MODEL,
+        CONF_ICAL_URL,
+        CONF_REFRESH_MINUTES,
+    )
+
+
+def test_use_ha_home_fills_coordinates() -> None:
+    merged = apply_home_location({CONF_USE_HA_HOME: True}, (45.0, 9.0))
+    assert merged[CONF_LATITUDE] == 45.0
+    assert merged[CONF_LONGITUDE] == 9.0
 
 
 def test_ac7_last_good_survives_failed_fetch(tmp_path: Path) -> None:

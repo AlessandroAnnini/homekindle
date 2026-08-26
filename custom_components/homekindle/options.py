@@ -45,6 +45,27 @@ DEFAULTS: dict[str, object] = {
     CONF_REFRESH_MINUTES: DEFAULT_REFRESH_MINUTES,
 }
 
+FORM_FIELDS = (
+    CONF_USE_HA_HOME,
+    CONF_LATITUDE,
+    CONF_LONGITUDE,
+    CONF_KINDLE_MODEL,
+    CONF_WEATHER_MODEL,
+    CONF_ICAL_URL,
+    CONF_REFRESH_MINUTES,
+)
+
+
+def apply_home_location(
+    options: dict,
+    home: tuple[float, float] | None,
+) -> dict:
+    merged = {**DEFAULTS, **options}
+    if merged.get(CONF_USE_HA_HOME) and home is not None:
+        merged[CONF_LATITUDE] = home[0]
+        merged[CONF_LONGITUDE] = home[1]
+    return merged
+
 
 def canvas_for(model: str) -> tuple[int, int]:
     return CANVASES.get(model, CANVASES[KINDLE_TOUCH])
