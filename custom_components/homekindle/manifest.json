@@ -1,0 +1,16 @@
+{
+  "domain": "homekindle",
+  "name": "HomeKindle",
+  "codeowners": ["@AlessandroAnnini"],
+  "documentation": "https://github.com/AlessandroAnnini/homekindle",
+  "issue_tracker": "https://github.com/AlessandroAnnini/homekindle/issues",
+  "integration_type": "service",
+  "iot_class": "local_polling",
+  "requirements": [
+    "pillow>=10.0.0",
+    "pyyaml>=6.0",
+    "icalendar>=5.0.0",
+    "recurring-ical-events>=3.0.0"
+  ],
+  "version": "0.1.1"
+}
