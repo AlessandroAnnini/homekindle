@@ -1,6 +1,12 @@
 # Changelog
 
 
+## [0.2.0] - 2026-08-26
+
+### Added
+
+- Feature `homekindle-options` shipped to develop.
+
 ## [0.1.1] - 2026-08-26
 
 ### Added
