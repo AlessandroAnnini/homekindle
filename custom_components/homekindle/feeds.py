@@ -41,3 +41,31 @@ def day_name(when: date, today: date) -> str:
     if when == today + timedelta(days=1):
         return "tomorrow"
     return when.isoformat()
+
+
+def weather_from_open_meteo(payload: dict) -> tuple:
+    raise NotImplementedError
+
+
+def events_from_ics(ics_text: str, start: datetime, end: datetime) -> tuple:
+    raise NotImplementedError
+
+
+def footer_labels(states: tuple[HaState, ...]) -> tuple[str, ...]:
+    raise NotImplementedError
+
+
+def ical_url_configured() -> str | None:
+    raise NotImplementedError
+
+
+class LastGoodStore:
+    def __init__(self, path: object | None = None) -> None:
+        self.path = path
+
+    def get(self) -> bytes | None:
+        raise NotImplementedError
+
+    def put(self, png: bytes) -> None:
+        raise NotImplementedError
+
