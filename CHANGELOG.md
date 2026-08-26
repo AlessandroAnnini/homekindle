@@ -1,6 +1,16 @@
 # Changelog
 
 
+## [0.2.3] - 2026-08-27
+
+### Added
+
+- HomeKindle device with a `image.homekindle_dashboard` entity for preview and Lovelace.
+
+### Changed
+
+- Larger fridge-glance type on the dashboard PNG.
+
 ## [0.2.2] - 2026-08-27
 
 ### Fixed
