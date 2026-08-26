@@ -3,12 +3,9 @@
 from __future__ import annotations
 
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from pathlib import Path
 
-from .fixtures import DEFAULT_FIXTURES
+from .dashboard import render_or_last_good
 from .http_view import dashboard_response
-from .layout import packaged_layout_path
-from .render import render_png
 
 PATH = "/api/homekindle/dashboard.png"
 
@@ -27,11 +24,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
         if self.path.split("?", 1)[0] != PATH:
             self.send_error(404)
             return
-        layout = packaged_layout_path()
-        if not layout.is_file():
-            studio = Path(__file__).resolve().parents[3] / "gf-program" / "dashboards" / "kindle.yaml"
-            layout = studio
-        png = render_png(DEFAULT_FIXTURES, layout)
+        png = render_or_last_good()
         status, headers, body = dashboard_response(png, self.headers.get("If-None-Match"))
         self.send_response(status)
         for key, value in headers.items():

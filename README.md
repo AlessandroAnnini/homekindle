@@ -13,7 +13,7 @@ No auth. ETag / If-None-Match so the screensaver can skip an unchanged frame.
 3. Add `homekindle:` to `configuration.yaml` (empty mapping is enough for fixtures).
 4. Confirm: `curl -I http://homeassistant.local:8123/api/homekindle/dashboard.png`
 
-This slice uses fixture weather and events. Live Open-Meteo / iCal / HA entities are the next feature.
+Weather comes from Open-Meteo ICON-2I. Calendar comes from `HOMEKINDLE_ICAL_URL` (HA secret or env). Never put the Google iCal URL in git. Tests use `tests/fixtures/sample.ics`. If a fetch fails, the last good PNG is served.
 
 ## Kindle client
 
