@@ -4,10 +4,14 @@ from __future__ import annotations
 
 from typing import Any
 
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.typing import ConfigType
-
 from .const import DOMAIN
+
+try:
+    from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.typing import ConfigType
+except ImportError:  # local unit tests without HA installed
+    HomeAssistant = Any  # type: ignore[misc,assignment]
+    ConfigType = dict  # type: ignore[misc,assignment]
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
