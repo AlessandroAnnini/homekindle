@@ -132,6 +132,15 @@ def _time_col(draw: ImageDraw.ImageDraw, font: ImageFont.ImageFont) -> int:
     return max(round(draw.textlength(sample, font=font)) for sample in ("00:00", "all day"))
 
 
+def _ink_mid_from_baseline(font: ImageFont.ImageFont) -> int:
+    """Offset from the baseline to the optical middle of a cap-height Latin line."""
+    try:
+        _left, top, _right, bottom = font.getbbox("H0", anchor="ls")
+    except TypeError:
+        return 0
+    return (top + bottom) // 2
+
+
 def _draw_tracked(
     draw: ImageDraw.ImageDraw,
     x: int,
@@ -241,7 +250,9 @@ def _column(
         title = _fit(draw, event.title, body, title_max)
         rows.append((y, event, title))
         y += step
-    centers = tuple(row_y + event_h // 2 for row_y, _event, _t in rows)
+    text_base = event_h - inset
+    mark_mid = _ink_mid_from_baseline(body)
+    centers = tuple(row_y + text_base + mark_mid for row_y, _event, _title in rows)
     if len(centers) >= 2:
         draw.line((line_x, centers[0], line_x, centers[-1]), fill=INK, width=1)
     radius = max(DOT_R, _px(DOT_R, scale))
@@ -252,7 +263,6 @@ def _column(
         else:
             draw.ellipse(box, fill=INK)
     time_right = line_x - gutter
-    text_base = event_h - inset
     for row_y, event, title in rows:
         draw.text(
             (time_right, row_y + text_base),

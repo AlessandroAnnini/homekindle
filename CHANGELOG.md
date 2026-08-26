@@ -1,6 +1,12 @@
 # Changelog
 
 
+## [0.2.2] - 2026-08-27
+
+### Fixed
+
+- Timeline rings and dots sit on the optical middle of each event row.
+
 ## [0.2.1] - 2026-08-27
 
 ### Added
