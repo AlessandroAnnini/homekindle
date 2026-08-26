@@ -24,7 +24,7 @@ Manual install: copy `custom_components/homekindle/` into `/config/custom_compon
 
 ## Versioning
 
-HACS shows the GitHub **Release** tag. After install, Home Assistant shows `version` from `custom_components/homekindle/manifest.json`. Those two numbers stay the same (`v0.2.1` tag, `"0.2.1"` in the manifest).
+HACS shows the GitHub **Release** tag. After install, Home Assistant shows `version` from `custom_components/homekindle/manifest.json`. Those two numbers stay the same (`v0.2.2` tag, `"0.2.2"` in the manifest).
 
 ## Settings
 

@@ -11,6 +11,7 @@ from custom_components.homekindle.fixtures import (
 )
 from custom_components.homekindle.layout import load_kindle_yaml, packaged_layout_path
 from custom_components.homekindle.render import (
+    BOX_EVENT,
     EVENT_STEP,
     INK,
     PAD,
@@ -21,6 +22,8 @@ from custom_components.homekindle.render import (
     Y_HEADING,
     Y_ICON,
     B,
+    _body_font,
+    _ink_mid_from_baseline,
     last_text_blobs,
     last_timeline,
     render_png,
@@ -151,5 +154,6 @@ def test_vertical_rhythm_uses_eight_pt_spacing() -> None:
     render_png(fixtures, packaged_layout_path())
     _line_x, centers = last_timeline()["today"]
     assert centers
-    assert all(cy % B == 0 for cy in centers)
+    mid = BOX_EVENT - B + _ink_mid_from_baseline(_body_font(16))
+    assert all(cy == Y_EVENTS + i * EVENT_STEP + mid for i, cy in enumerate(centers))
     assert centers[1] - centers[0] == EVENT_STEP
