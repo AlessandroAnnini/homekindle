@@ -1,0 +1,51 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "HomeKindle",
+        "description": "Defaults work for this house. Set the same refresh minutes on the Kindle screensaver; this field only controls Home Assistant refetches.",
+        "data": {
+          "use_ha_home": "Use Home Assistant home location",
+          "latitude": "Latitude",
+          "longitude": "Longitude",
+          "kindle_model": "Kindle model",
+          "weather_model": "Weather model",
+          "ical_url": "Calendar ICS URL",
+          "refresh_minutes": "Refresh minutes"
+        },
+        "data_description": {
+          "kindle_model": "Canvas size. Touch is 600×800. Paperwhite 1 is 758×1024.",
+          "weather_model": "Open-Meteo model. ICON-2I is Italy. Best match picks for the coordinates. Regional models fail outside their area.",
+          "ical_url": "Secret Google calendar address. Leave empty for weather only. Never commit this URL.",
+          "refresh_minutes": "How often Home Assistant refetches weather and calendar. Set the same number on the Kindle screensaver."
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "HomeKindle is already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "HomeKindle",
+        "description": "Set the same refresh minutes on the Kindle screensaver; this field only controls Home Assistant refetches.",
+        "data": {
+          "use_ha_home": "Use Home Assistant home location",
+          "latitude": "Latitude",
+          "longitude": "Longitude",
+          "kindle_model": "Kindle model",
+          "weather_model": "Weather model",
+          "ical_url": "Calendar ICS URL",
+          "refresh_minutes": "Refresh minutes"
+        },
+        "data_description": {
+          "kindle_model": "Canvas size. Touch is 600×800. Paperwhite 1 is 758×1024.",
+          "weather_model": "Open-Meteo model. ICON-2I is Italy. Best match picks for the coordinates. Regional models fail outside their area.",
+          "ical_url": "Secret Google calendar address. Leave empty for weather only.",
+          "refresh_minutes": "How often Home Assistant refetches weather and calendar. Set the same number on the Kindle screensaver."
+        }
+      }
+    }
+  }
+}
