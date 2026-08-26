@@ -5,6 +5,11 @@
   "documentation": "https://github.com/alan/homekindle",
   "integration_type": "service",
   "iot_class": "local_polling",
-  "requirements": ["pillow>=10.0.0", "pyyaml>=6.0"],
+  "requirements": [
+    "pillow>=10.0.0",
+    "pyyaml>=6.0",
+    "icalendar>=5.0.0",
+    "recurring-ical-events>=3.0.0"
+  ],
   "version": "0.1.0"
 }
