@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import tempfile
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -114,7 +115,7 @@ def ical_url_configured() -> str | None:
 
 class LastGoodStore:
     def __init__(self, path: object | None = None) -> None:
-        self.path = Path(path) if path else Path("/tmp/gf-homekindle-last.png")
+        self.path = Path(path) if path else Path(tempfile.gettempdir()) / "gf-homekindle-last.png"
 
     def get(self) -> bytes | None:
         if self.path.is_file():
