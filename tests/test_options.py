@@ -88,6 +88,32 @@ def test_use_ha_home_fills_coordinates() -> None:
     assert merged[CONF_LONGITUDE] == 9.0
 
 
+def test_defaults_include_coordinates() -> None:
+    from custom_components.homekindle.options import DEFAULTS
+
+    assert DEFAULTS[CONF_LATITUDE] == 43.62
+    assert DEFAULTS[CONF_LONGITUDE] == 13.41
+
+
+def test_fetch_text_rejects_redirect(monkeypatch) -> None:
+    from custom_components.homekindle import options as opt
+
+    def fake_open(_request, timeout=20):
+        raise ValueError("refusing HTTP redirect to https://evil.example")
+
+    monkeypatch.setattr(
+        opt,
+        "build_opener",
+        lambda *_a, **_k: type("O", (), {"open": staticmethod(fake_open)})(),
+    )
+    try:
+        opt.fetch_text("https://example.invalid/cal")
+    except ValueError as exc:
+        assert "redirect" in str(exc)
+    else:
+        raise AssertionError("expected redirect refusal")
+
+
 def test_fetch_text_rejects_file_scheme() -> None:
     from custom_components.homekindle.options import fetch_text
 

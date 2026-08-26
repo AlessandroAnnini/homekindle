@@ -45,7 +45,6 @@ def test_ac3_empty_tomorrow_says_nothing_booked() -> None:
         updated="22:45",
         workday=True,
         exceptions=(),
-        todos=(),
     )
     png = render_png(fixtures, LAYOUT)
     image = Image.open(BytesIO(png))
