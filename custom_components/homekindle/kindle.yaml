@@ -1,0 +1,98 @@
+# Kindle e-ink dashboard. Home Assistant Lovelace sections YAML.
+# Same keys as a YAML-mode dashboard (type: sections). A later editor can
+# reuse this file. Stock card types only.
+#
+# The homekindle extras are first-slice only. Stock weather-forecast and
+# calendar cards cannot pin today versus tomorrow. Lovelace ignores unknown
+# keys.
+#
+# Canvas: 600x800, 16-level gray. View max_columns: 2.
+# Syntax: https://www.home-assistant.io/docs/configuration/yaml/
+# Style: https://developers.home-assistant.io/docs/documenting/yaml-style-guide/
+
+title: "Kindle"
+views:
+  - title: "Kindle"
+    path: kindle
+    type: sections
+    max_columns: 2
+    sections:
+      - type: grid
+        title: "Today"
+        cards:
+          - type: heading
+            heading: "Today"
+            heading_style: title
+          - type: weather-forecast
+            entity: weather.homekindle
+            forecast_type: daily
+            show_current: true
+            show_forecast: false
+            round_temperature: true
+            homekindle:
+              day: today
+          - type: calendar
+            initial_view: dayGridDay
+            entities:
+              - calendar.homekindle
+            homekindle:
+              day: today
+              max_events: 6
+
+      - type: grid
+        title: "Tomorrow"
+        cards:
+          - type: heading
+            heading: "Tomorrow"
+            heading_style: title
+          - type: weather-forecast
+            entity: weather.homekindle
+            forecast_type: daily
+            show_current: false
+            show_forecast: true
+            round_temperature: true
+            homekindle:
+              day: tomorrow
+          - type: calendar
+            initial_view: dayGridDay
+            entities:
+              - calendar.homekindle
+            homekindle:
+              day: tomorrow
+              max_events: 6
+
+      - type: grid
+        column_span: 2
+        cards:
+          - type: markdown
+            content: "updated {{ now().strftime('%H:%M') }}"
+          - type: entity
+            entity: binary_sensor.workday_sensor_it_an
+            name: "Workday"
+          - type: entity-filter
+            show_empty: false
+            entities:
+              - entity: binary_sensor.refrigerator_door_open_fridge
+                name: "Fridge door"
+              - entity: binary_sensor.maltempo_serrande
+                name: "Storm shutters"
+              - entity: input_boolean.qualcuno_dorme
+                name: "Someone sleeping"
+              - entity: input_boolean.ospiti
+                name: "Guests"
+              - entity: input_boolean.vacanza
+                name: "Holiday"
+            conditions:
+              - condition: state
+                state: "on"
+            card:
+              type: glance
+              show_icon: false
+          - type: todo-list
+            entity: todo.shopping_list
+            hide_completed: true
+            hide_create: true
+            hide_section_headers: true
+            homekindle:
+              max_items: 5
+              hide_when_empty: true
