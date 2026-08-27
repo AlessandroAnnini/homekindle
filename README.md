@@ -2,9 +2,9 @@
 
 HACS custom integration that renders a 600x800 grayscale PNG for a jailbroken Kindle Touch and serves it at:
 
-`http://homeassistant.local:8123/api/homekindle/dashboard.png`
+`http://homeassistant.local:8123/api/homekindle/screensaver.png`
 
-![HomeKindle two-day dashboard](docs/example.png)
+![HomeKindle two-day screensaver](docs/example.png)
 
 Weather and a two-day agenda. All-day events use an open ring; timed events use a filled dot. No auth. ETag / If-None-Match so the screensaver can skip an unchanged frame.
 
@@ -18,14 +18,14 @@ Weather and a two-day agenda. All-day events use an open ring; timed events use 
 4. Restart Home Assistant.
 5. Settings → Devices & services → Add integration → **HomeKindle**.
 6. Set location (or use HA home), Kindle model, weather model, secret ICS URL, and refresh minutes. Submit.
-7. Open the HomeKindle device. The **Dashboard** image entity shows the same PNG the Kindle fetches. Add `image.homekindle_dashboard` to a Lovelace card if you want it on a dashboard. Configure stays on the integration entry.
-8. Kindle check: `curl -I http://homeassistant.local:8123/api/homekindle/dashboard.png`
+7. Open the HomeKindle device. The **Screensaver** image entity shows the same PNG the Kindle fetches. **Regenerate** rebuilds it in Home Assistant; the Kindle picks it up on its next poll. Add `image.homekindle_dashboard` to a Lovelace card if you want it there. Configure stays on the integration entry.
+8. Kindle check: `curl -I http://homeassistant.local:8123/api/homekindle/screensaver.png`
 
 Manual install: copy `custom_components/homekindle/` into `/config/custom_components/homekindle/` and restart.
 
 ## Versioning
 
-HACS shows the GitHub **Release** tag. After install, Home Assistant shows `version` from `custom_components/homekindle/manifest.json`. Those two numbers stay the same (`v0.2.3` tag, `"0.2.3"` in the manifest).
+HACS shows the GitHub **Release** tag. After install, Home Assistant shows `version` from `custom_components/homekindle/manifest.json`. Those two numbers stay the same (`v0.2.4` tag, `"0.2.4"` in the manifest).
 
 ## Settings
 
@@ -43,7 +43,7 @@ Weather is Open-Meteo. Calendar is the ICS URL on the config entry (or `HOMEKIND
 
 Jailbreak and restore for this Touch (serial prefix B011, firmware 5.3.7.3) live in the studio docs, not this git tree.
 
-Point Online Screensaver at the HTTP URL above. Airplane mode except when fetching. Do not use HTTPS on this device.
+Point Online Screensaver at the HTTP URL above. The old `/api/homekindle/dashboard.png` path still answers until you change `IMAGE_URI` on the Kindle. Airplane mode except when fetching. Do not use HTTPS on this device.
 
 ## Local preview
 
@@ -51,7 +51,7 @@ Point Online Screensaver at the HTTP URL above. Airplane mode except when fetchi
 python3 -m venv .venv
 .venv/bin/pip install -e '.[dev]'
 .venv/bin/python scripts/serve_local.py 8129
-# GET http://127.0.0.1:8129/api/homekindle/dashboard.png
+# GET http://127.0.0.1:8129/api/homekindle/screensaver.png
 .venv/bin/pytest tests -q
 ./scripts/e2e-dashboard.sh
 ```

@@ -10,7 +10,7 @@ cleanup() { kill "$PID" 2>/dev/null || true; }
 trap cleanup EXIT
 ok=0
 for _ in $(seq 1 25); do
-  if curl -sf "http://127.0.0.1:${PORT}/api/homekindle/dashboard.png" -o /tmp/gf-homekindle.png; then
+  if curl -sf "http://127.0.0.1:${PORT}/api/homekindle/screensaver.png" -o /tmp/gf-homekindle.png; then
     ok=1
     break
   fi
@@ -27,7 +27,7 @@ assert img.size == (600, 800), img.size
 assert img.mode == "L", img.mode
 print("e2e png ok", img.size, img.mode)
 PY
-ETAG=$(curl -sD - -o /dev/null "http://127.0.0.1:${PORT}/api/homekindle/dashboard.png" | awk -F': ' 'tolower($1)=="etag"{gsub("\r","",$2); print $2}')
-CODE=$(curl -s -o /dev/null -w '%{http_code}' -H "If-None-Match: ${ETAG}" "http://127.0.0.1:${PORT}/api/homekindle/dashboard.png")
+ETAG=$(curl -sD - -o /dev/null "http://127.0.0.1:${PORT}/api/homekindle/screensaver.png" | awk -F': ' 'tolower($1)=="etag"{gsub("\r","",$2); print $2}')
+CODE=$(curl -s -o /dev/null -w '%{http_code}' -H "If-None-Match: ${ETAG}" "http://127.0.0.1:${PORT}/api/homekindle/screensaver.png")
 test "$CODE" = "304"
 echo "e2e 304 ok"

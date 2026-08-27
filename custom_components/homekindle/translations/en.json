@@ -27,8 +27,13 @@
   },
   "entity": {
     "image": {
-      "dashboard": {
-        "name": "Dashboard"
+      "screensaver": {
+        "name": "Screensaver"
+      }
+    },
+    "button": {
+      "regenerate": {
+        "name": "Regenerate"
       }
     }
   },

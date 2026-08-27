@@ -1,6 +1,17 @@
 # Changelog
 
 
+## [0.2.4] - 2026-08-27
+
+### Added
+
+- **Regenerate** button on the HomeKindle device.
+
+### Changed
+
+- Image entity name is **Screensaver**.
+- Canonical PNG URL is `/api/homekindle/screensaver.png`. The old `dashboard.png` path still answers.
+
 ## [0.2.3] - 2026-08-27
 
 ### Added

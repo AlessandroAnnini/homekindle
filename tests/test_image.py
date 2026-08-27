@@ -1,5 +1,6 @@
 """Image entity helpers. No Home Assistant import required."""
 
+from custom_components.homekindle.button import regenerate_unique_id
 from custom_components.homekindle.const import DOMAIN
 from custom_components.homekindle.image import (
     dashboard_device_info,
@@ -17,6 +18,10 @@ def test_kindle_model_label() -> None:
 
 def test_dashboard_unique_id() -> None:
     assert dashboard_unique_id("abc123") == "abc123_dashboard"
+
+
+def test_regenerate_unique_id() -> None:
+    assert regenerate_unique_id("abc123") == "abc123_regenerate"
 
 
 def test_dashboard_device_info() -> None:

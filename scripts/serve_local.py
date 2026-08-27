@@ -1,4 +1,4 @@
-"""Run the fixture PNG stand-in: GET /api/homekindle/dashboard.png"""
+"""Run the fixture PNG stand-in: GET /api/homekindle/screensaver.png"""
 
 from __future__ import annotations
 
