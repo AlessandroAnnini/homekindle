@@ -20,8 +20,8 @@ def ha_states(hass) -> tuple[HaState, ...]:
 
 
 class HomeKindleDashboardView(HomeAssistantView):
-    url = "/api/homekindle/dashboard.png"
-    name = "api:homekindle:dashboard"
+    url = "/api/homekindle/screensaver.png"
+    name = "api:homekindle:screensaver"
     requires_auth = False
 
     async def get(self, request):
@@ -36,3 +36,8 @@ class HomeKindleDashboardView(HomeAssistantView):
         from aiohttp import web
 
         return web.Response(status=status, headers=headers, body=body)
+
+
+class HomeKindleLegacyPngView(HomeKindleDashboardView):
+    url = "/api/homekindle/dashboard.png"
+    name = "api:homekindle:dashboard"

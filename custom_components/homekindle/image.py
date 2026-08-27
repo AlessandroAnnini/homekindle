@@ -1,4 +1,4 @@
-"""Dashboard image entity. Helpers stay importable without Home Assistant."""
+"""Screensaver image entity. Helpers stay importable without Home Assistant."""
 
 from __future__ import annotations
 
@@ -51,11 +51,9 @@ try:
     from .dashboard import render_or_last_good
     from .ha_view import ha_states
 
-    async def async_setup_entry(
-        hass: HomeAssistant,
-        entry: ConfigEntry,
-        async_add_entities: AddEntitiesCallback,
-    ) -> None:
+    async def async_create_coordinator(
+        hass: HomeAssistant, entry: ConfigEntry
+    ) -> DataUpdateCoordinator[bytes]:
         options = hass.data[DOMAIN]["options"]
         minutes = int(options.get(CONF_REFRESH_MINUTES) or DEFAULT_REFRESH_MINUTES)
 
@@ -75,11 +73,19 @@ try:
             always_update=False,
         )
         await coordinator.async_config_entry_first_refresh()
+        return coordinator
+
+    async def async_setup_entry(
+        hass: HomeAssistant,
+        entry: ConfigEntry,
+        async_add_entities: AddEntitiesCallback,
+    ) -> None:
+        coordinator = hass.data[DOMAIN]["coordinator"]
         async_add_entities([HomeKindleImage(hass, entry, coordinator)])
 
     class HomeKindleImage(ImageEntity):
         _attr_has_entity_name = True
-        _attr_translation_key = "dashboard"
+        _attr_translation_key = "screensaver"
         _attr_content_type = "image/png"
 
         def __init__(

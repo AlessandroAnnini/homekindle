@@ -1,4 +1,4 @@
-"""Local stand-in for GET /api/homekindle/dashboard.png without HAOS."""
+"""Local stand-in for GET /api/homekindle/screensaver.png without HAOS."""
 
 from __future__ import annotations
 
@@ -7,7 +7,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from .dashboard import render_or_last_good
 from .http_view import dashboard_response
 
-PATH = "/api/homekindle/dashboard.png"
+PATH = "/api/homekindle/screensaver.png"
+LEGACY_PATH = "/api/homekindle/dashboard.png"
 
 
 class DashboardHandler(BaseHTTPRequestHandler):
@@ -21,7 +22,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
         self._handle(write_body=True)
 
     def _handle(self, *, write_body: bool) -> None:
-        if self.path.split("?", 1)[0] != PATH:
+        if self.path.split("?", 1)[0] not in {PATH, LEGACY_PATH}:
             self.send_error(404)
             return
         png = render_or_last_good()

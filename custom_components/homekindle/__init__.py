@@ -26,9 +26,10 @@ CONFIG_SCHEMA = cv.empty_config_schema(DOMAIN)
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     hass.data.setdefault(DOMAIN, {})
     try:
-        from .ha_view import HomeKindleDashboardView
+        from .ha_view import HomeKindleDashboardView, HomeKindleLegacyPngView
 
         hass.http.register_view(HomeKindleDashboardView())
+        hass.http.register_view(HomeKindleLegacyPngView())
     except (ImportError, AttributeError):
         pass
     return True
@@ -47,11 +48,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: Any) -> bool:
     tz = getattr(hass.config, "time_zone", None)
     if tz:
         opts[CONF_TIMEZONE] = tz
-    hass.data.setdefault(DOMAIN, {})["options"] = opts
+    store = hass.data.setdefault(DOMAIN, {})
+    store["options"] = opts
     dashboard.CURRENT_OPTIONS = opts
+    from .image import async_create_coordinator
+
+    store["coordinator"] = await async_create_coordinator(hass, entry)
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: Any) -> bool:
-    return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    unloaded = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    if unloaded:
+        hass.data.get(DOMAIN, {}).pop("coordinator", None)
+    return unloaded
